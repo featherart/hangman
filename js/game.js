@@ -1,20 +1,17 @@
 var word = {
-  // This is an attribute of the object word.
   secretWord: "zeitgeist",
-  wordList: ['ephemeral', 'glow', 'sunset', 'bloom', 'egg', 'rainbow', 'girl', 'diamond', 'verse', 'idiot', 'granny', 'sock', 'tulip', 'jasmine', 'cache', 'dollar', 'quarter', 'pebble', 'bird', 'cowboy', 'panda', 'umbrella', 'blood'],
+  wordList: ['x-ray', 'glow', 'sunrise', 'blame', 'urchin', 'rainbow', 'girl', 'ruby', 'vile', 'dog', 'cat', 'sock', 'tulip', 'jasmine', 'cache', 'horse', 'chicken', 'goat', 'bird', 'cow', 'zebra', 'glide', 'wine', 'water'],
 
   setSecretWord: function(){
-    console.log("in setter");
+    // for now we are only handling words with all unique letters!
     return this.secretWord = this.wordList[Math.floor(Math.random() * this.wordList.length)];
-    //this.secretWord = this.wordList[_.random(this.wordList.length - 1)];
-    console.log("in secret word: " + this.secretWord);
   },
 
   checkLetters: function(guessedLetters){
     // an array of guessed letters is passed in
     // intersection finds common letters
     console.log("in guessed letters: " + guessedLetters.length);
-    var blanks = [];
+    var blanks = _.range(this.secretWord.length).map(function () { return '_' })
     console.log("blanks: " + blanks);
     var correctLetters = _.intersection(this.secretWord, guessedLetters);
     var wrongLetters = [];
@@ -22,14 +19,15 @@ var word = {
     console.log("here's correct_letters: " + correctLetters);
     for(var i = 0; i < guessedLetters.length; i++) {
       for(var n = 0; n < this.secretWord.length; n++) {
-        blanks.push("_");
         if(guessedLetters[i] === this.secretWord[n]) {
-          blanks.push(guessedLetters[i]);
+          console.log("in if guessedLetters[i]: " + guessedLetters[i]);
+          // this only works for first letter though
+          blanks.shift()
+          blanks.unshift(guessedLetters[i]); // unshift
         }
       }
     }
-    console.log("wrong letters: " + wrongLetters);
-    return [blanks.slice(1,blanks.length),correctLetters];
+    return [blanks,correctLetters];
   }
 };
 
