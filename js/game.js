@@ -1,6 +1,6 @@
 var word = {
   secretWord: "zeitgeist",
-  wordList: ['x-ray', 'glow', 'sunrise', 'blame', 'urchin', 'rainbow', 'girl', 'ruby', 'vile', 'dog', 'cat', 'sock', 'tulip', 'jasmine', 'cache', 'horse', 'chicken', 'goat', 'bird', 'cow', 'zebra', 'glide', 'wine', 'water'],
+  wordList: ['ray', 'glow', 'sunrise', 'blame', 'urchin', 'rainbow', 'girl', 'ruby', 'vile', 'dog', 'cat', 'sock', 'tulip', 'jasmine', 'cache', 'horse', 'chicken', 'goat', 'bird', 'cow', 'zebra', 'glide', 'wine', 'water'],
 
   setSecretWord: function(){
     // for now we are only handling words with all unique letters!
@@ -10,21 +10,20 @@ var word = {
   checkLetters: function(guessedLetters){
     // an array of guessed letters is passed in
     // intersection finds common letters
+    console.log("in guessed letters: " + guessedLetters);
     console.log("in guessed letters: " + guessedLetters.length);
+
     var blanks = _.range(this.secretWord.length).map(function () { return '_' })
     console.log("blanks: " + blanks);
     var correctLetters = _.intersection(this.secretWord, guessedLetters);
-    var wrongLetters = [];
+    //var wrongLetters = [];
 
     console.log("here's correct_letters: " + correctLetters);
     for(var i = 0; i < guessedLetters.length; i++) {
       for(var n = 0; n < this.secretWord.length; n++) {
         if(guessedLetters[i] === this.secretWord[n]) {
-          console.log("in if guessedLetters[i]: " + guessedLetters[i]);
-          // this only works for first letter though
-          blanks.shift()
-          blanks.unshift(guessedLetters[i]); // unshift
-        }
+          blanks[i] = this.secretWord[n];
+         }
       }
     }
     return [blanks,correctLetters];
@@ -83,11 +82,11 @@ var game = {
 
   // Update the display with the parts of the secret word guessed, the letters guessed, and the guesses remaining
   updateDisplay: function(secretWordWithBlanks, guessedLetters, guessesLeft){
-    $("#wordString").val("");
-    $("#wordString").append(secretWordWithBlanks);
+    //$("#wordString").val("");
+    $("#wordString").html(secretWordWithBlanks);
     $("#guessedLetters").append(guessedLetters);
-    $("#guessesLeft").val("");
-    $("#guessesLeft").append(guessesLeft);
+    //$("#guessesLeft").val("");
+    $("#guessesLeft").html(guessesLeft);
 
   }
 };
