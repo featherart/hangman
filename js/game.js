@@ -1,6 +1,6 @@
 var word = {
   secretWord: "zeitgeist",
-  wordList: ['ray', 'glow', 'sunrise', 'blame', 'urchin', 'rainbow', 'girl', 'ruby', 'vile', 'dog', 'cat', 'sock', 'tulip', 'jasmine', 'cache', 'horse', 'chicken', 'goat', 'bird', 'cow', 'zebra', 'glide', 'wine', 'water'],
+  wordList: ['ray', 'glow', 'sunrise', 'blame', 'urchin', 'rainbow', 'girl', 'ruby', 'vile', 'dog', 'cat', 'sock', 'tulip', 'jasmine', 'candy', 'horse', 'chicken', 'goat', 'bird', 'cow', 'zebra', 'glide', 'wine', 'water'],
 
   setSecretWord: function(){
     // for now we are only handling words with all unique letters!
@@ -22,7 +22,10 @@ var word = {
     for(var i = 0; i < guessedLetters.length; i++) {
       for(var n = 0; n < this.secretWord.length; n++) {
         if(guessedLetters[i] === this.secretWord[n]) {
-          blanks[i] = this.secretWord[n];
+          console.log("in if guessedLetters[i]: " + guessedLetters[i]);
+          console.log("in if, i: " + i);
+          console.log("in if, n: " + n);
+          blanks[n] = this.secretWord[n];
          }
       }
     }
