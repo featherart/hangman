@@ -1,30 +1,23 @@
 var word = {
   secretWord: "zeitgeist",
-  wordList: ['ray', 'glow', 'sunrise', 'blame', 'urchin', 'rainbow', 'girl', 'ruby', 'vile', 'dog', 'cat', 'sock', 'tulip', 'jasmine', 'candy', 'horse', 'chicken', 'goat', 'bird', 'cow', 'zebra', 'glide', 'wine', 'water'],
+  wordList: ['ray', 'glow', 'cache', 'sunrise', 'blame', 'urchin', 'rainbow', 'girl', 'ruby', 'vile', 'dog', 'cat', 'sock', 'tulip', 'jasmine', 'candy', 'horse', 'chicken', 'goat', 'bird', 'cow', 'zebra', 'glide', 'wine', 'water'],
 
   setSecretWord: function(){
-    // for now we are only handling words with all unique letters!
     return this.secretWord = this.wordList[Math.floor(Math.random() * this.wordList.length)];
   },
 
   checkLetters: function(guessedLetters){
-    // an array of guessed letters is passed in
-    // intersection finds common letters
-    console.log("in guessed letters: " + guessedLetters);
-    console.log("in guessed letters: " + guessedLetters.length);
 
     var blanks = _.range(this.secretWord.length).map(function () { return '_' })
-    console.log("blanks: " + blanks);
     var correctLetters = _.intersection(this.secretWord, guessedLetters);
-    //var wrongLetters = [];
 
     console.log("here's correct_letters: " + correctLetters);
     for(var i = 0; i < guessedLetters.length; i++) {
       for(var n = 0; n < this.secretWord.length; n++) {
         if(guessedLetters[i] === this.secretWord[n]) {
-          console.log("in if guessedLetters[i]: " + guessedLetters[i]);
-          console.log("in if, i: " + i);
-          console.log("in if, n: " + n);
+          //console.log("in if guessedLetters[i]: " + guessedLetters[i]);
+          //console.log("in if, i: " + i);
+          //console.log("in if, n: " + n);
           blanks[n] = this.secretWord[n];
          }
       }
@@ -39,20 +32,26 @@ var player = {
 
   // Takes a new letter as input and updates the game
   makeGuess: function(letter){
-    //var letters = word.secretWord.split("");
     this.guessedLetters.push(letter);
     console.log("in make guess: " + this.guessedLetters);
 
     // use checkLetters to get blanks and see if they won
     var results = word.checkLetters(this.guessedLetters);
-    console.log("here is blanks: " + results[0]);
-    console.log("here is the right letter: " + results[1]);
+    console.log("results[0]: " + results[0]);
+    console.log("results[1]: " + results[1]);
 
     game.updateDisplay(results[0], letter, (this.MAX_GUESSES - this.guessedLetters.length));
 
-    if(this.checkLose(this.guessedLetters) === true) {
-      game.resetGame();
+    if(this.checkWin(this.guessedLetters.flatten()) === true ) {
       game.updateDisplay(this.guessedLetters, word.secretWord, 0);
+      game.resetGame();
+      console.log("win game");
+    }
+
+
+    if(this.checkLose(this.guessedLetters) === true) {
+      game.updateDisplay(this.guessedLetters, word.secretWord, 0);
+      game.resetGame();
       console.log("lose game");
     };
 
@@ -60,8 +59,9 @@ var player = {
 
   // Check if the player has won and end the game if so
   checkWin: function(wordString){
+    console.log("in checkwin: " + wordString);
+    console.log("in checkwin: " + word.secretWord);
     if(wordString === word.secretWord) {
-      game.resetGame();
       return true;
     } else {
       return false;
@@ -81,14 +81,15 @@ var game = {
   },
 
   // Reveals the answer to the secret word and ends the game
-  giveUp: function(){},
+  giveUp: function(){
+    game.updateDisplay(this.guessedLetters, word.secretWord, 0);
+    game.resetGame();
+  },
 
   // Update the display with the parts of the secret word guessed, the letters guessed, and the guesses remaining
   updateDisplay: function(secretWordWithBlanks, guessedLetters, guessesLeft){
-    //$("#wordString").val("");
     $("#wordString").html(secretWordWithBlanks);
     $("#guessedLetters").append(guessedLetters);
-    //$("#guessesLeft").val("");
     $("#guessesLeft").html(guessesLeft);
 
   }
@@ -120,6 +121,7 @@ window.onload = function(){
   // Add event listener to the give up button to give up when clicked
   $("#resetButton").on("click", function() {
     console.log("click reset ");
+    game.resetGame();
   });
 
 };
