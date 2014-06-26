@@ -15,9 +15,6 @@ var word = {
     for(var i = 0; i < guessedLetters.length; i++) {
       for(var n = 0; n < this.secretWord.length; n++) {
         if(guessedLetters[i] === this.secretWord[n]) {
-          //console.log("in if guessedLetters[i]: " + guessedLetters[i]);
-          //console.log("in if, i: " + i);
-          //console.log("in if, n: " + n);
           blanks[n] = this.secretWord[n];
          }
       }
@@ -42,22 +39,24 @@ var player = {
 
     game.updateDisplay(results[0], letter, (this.MAX_GUESSES - this.guessedLetters.length));
 
-    if(this.checkWin(this.guessedLetters.flatten()) === true ) {
-      game.updateDisplay(this.guessedLetters, word.secretWord, 0);
-      game.resetGame();
+    if( this.checkWin(results[0].join('')) === true ) {
+      game.updateDisplay(word.secretWord, this.guessedLetters , (this.MAX_GUESSES - this.guessedLetters.length));
+      $('#wordString').css("color", "green");
+      //game.resetGame();
       console.log("win game");
+      return;
     }
 
-
     if(this.checkLose(this.guessedLetters) === true) {
-      game.updateDisplay(this.guessedLetters, word.secretWord, 0);
+      game.updateDisplay(word.secretWord, this.guessedLetters , (this.MAX_GUESSES - this.guessedLetters.length));
+      $('#wordString').css('color', 'red');
       game.resetGame();
       console.log("lose game");
     };
 
   },
 
-  // Check if the player has won and end the game if so
+  // Check if the player has won
   checkWin: function(wordString){
     console.log("in checkwin: " + wordString);
     console.log("in checkwin: " + word.secretWord);
@@ -69,6 +68,7 @@ var player = {
   },
 
   checkLose: function(wrongLetters){
+
     return wrongLetters.length >= this.MAX_GUESSES;
   }
 };
@@ -76,13 +76,13 @@ var player = {
 var game = {
   // Resets the game
   resetGame: function(){
-    player.guessedLetters = [];
+    //player.guessedLetters = [];
     word.setSecretWord();
   },
 
   // Reveals the answer to the secret word and ends the game
   giveUp: function(){
-    game.updateDisplay(this.guessedLetters, word.secretWord, 0);
+    game.updateDisplay(word.secretWord, this.guessedLetters , 0);
     game.resetGame();
   },
 
@@ -122,6 +122,7 @@ window.onload = function(){
   $("#resetButton").on("click", function() {
     console.log("click reset ");
     game.resetGame();
+    location.reload();
   });
 
 };
