@@ -10,8 +10,11 @@ var word = {
 
     var blanks = _.range(this.secretWord.length).map(function () { return '_' })
     var correctLetters = _.intersection(this.secretWord, guessedLetters);
+    var wrongLetters = $(guessedLetters).not(correctLetters).get();
+    console.log("here's wrong letters: " + wrongLetters);
 
     console.log("here's correct_letters: " + correctLetters);
+    console.log("here's guessed letters: " + guessedLetters);
     for(var i = 0; i < guessedLetters.length; i++) {
       for(var n = 0; n < this.secretWord.length; n++) {
         if(guessedLetters[i] === this.secretWord[n]) {
@@ -19,7 +22,7 @@ var word = {
          }
       }
     }
-    return [blanks,correctLetters];
+    return [blanks,wrongLetters];
   }
 };
 
@@ -37,18 +40,17 @@ var player = {
     console.log("results[0]: " + results[0]);
     console.log("results[1]: " + results[1]);
 
-    game.updateDisplay(results[0], letter, (this.MAX_GUESSES - this.guessedLetters.length));
+    game.updateDisplay(results[0], letter, (this.MAX_GUESSES - results[1].length));
 
     if( this.checkWin(results[0].join('')) === true ) {
-      game.updateDisplay(word.secretWord, this.guessedLetters , (this.MAX_GUESSES - this.guessedLetters.length));
+      game.updateDisplay(word.secretWord, this.guessedLetters , (this.MAX_GUESSES - results[1].length));
       $('#wordString').css("color", "green");
-      //game.resetGame();
       console.log("win game");
       return;
     }
 
-    if(this.checkLose(this.guessedLetters) === true) {
-      game.updateDisplay(word.secretWord, this.guessedLetters , (this.MAX_GUESSES - this.guessedLetters.length));
+    if(this.checkLose(results[1]) === true) {
+      game.updateDisplay(word.secretWord, this.guessedLetters , (this.MAX_GUESSES - results[1].length));
       $('#wordString').css('color', 'red');
       game.resetGame();
       console.log("lose game");
