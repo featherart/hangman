@@ -7,14 +7,12 @@ var word = {
   },
 
   checkLetters: function(guessedLetters){
-
-    var blanks = _.range(this.secretWord.length).map(function () { return '_' })
+    // make an array of _
+    var blanks = _.range(this.secretWord.length).map(function () { return '_' });
+    // find the correct letters so far, use to figure out wrong letters
     var correctLetters = _.intersection(this.secretWord, guessedLetters);
     var wrongLetters = $(guessedLetters).not(correctLetters).get();
-    console.log("here's wrong letters: " + wrongLetters);
-
-    console.log("here's correct_letters: " + correctLetters);
-    console.log("here's guessed letters: " + guessedLetters);
+    // replace blanks with correct letters
     for(var i = 0; i < guessedLetters.length; i++) {
       for(var n = 0; n < this.secretWord.length; n++) {
         if(guessedLetters[i] === this.secretWord[n]) {
@@ -33,12 +31,9 @@ var player = {
   // Takes a new letter as input and updates the game
   makeGuess: function(letter){
     this.guessedLetters.push(letter);
-    console.log("in make guess: " + this.guessedLetters);
 
     // use checkLetters to get blanks and see if they won
     var results = word.checkLetters(this.guessedLetters);
-    console.log("results[0]: " + results[0]);
-    console.log("results[1]: " + results[1]);
 
     game.updateDisplay(results[0], letter, (this.MAX_GUESSES - results[1].length));
 
@@ -51,17 +46,14 @@ var player = {
 
     if(this.checkLose(results[1]) === true) {
       game.updateDisplay(word.secretWord, this.guessedLetters , (this.MAX_GUESSES - results[1].length));
-      $('#wordString').css('color', 'red');
+      $('#wordString').css("color", "red");
       game.resetGame();
       console.log("lose game");
     };
-
   },
 
   // Check if the player has won
   checkWin: function(wordString){
-    console.log("in checkwin: " + wordString);
-    console.log("in checkwin: " + word.secretWord);
     if(wordString === word.secretWord) {
       return true;
     } else {
@@ -70,7 +62,6 @@ var player = {
   },
 
   checkLose: function(wrongLetters){
-
     return wrongLetters.length >= this.MAX_GUESSES;
   }
 };
@@ -78,7 +69,6 @@ var player = {
 var game = {
   // Resets the game
   resetGame: function(){
-    //player.guessedLetters = [];
     word.setSecretWord();
   },
 
@@ -98,14 +88,7 @@ var game = {
 };
 
 window.onload = function(){
-  // Created a losing scenario
-  // console.log(player.checkLose(wrongLettersArray));
-
-  // Created a not yet losing scenario
-  // console.log(player.checkLose(wrongLettersArray));
-  // Start a new game
   game.resetGame();
-  console.log(word.secretWord);
 
   // Add event listener to the letter input field to grab letters that are guessed
   $("#letterField").on("keyup", function() {
